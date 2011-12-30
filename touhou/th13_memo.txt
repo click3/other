@@ -1,0 +1,216 @@
+
+・関数群(.text)
+//00404070	ボム情報ベースクラスのコンストラクタ(void (__fastcall *)(void *this_ptr)と思われる)
+//00404830	トランス終了
+//00409100	ボム情報クラス割り当て(bool (*)(void)と思われる)
+//004091B0	霊夢ボム情報クラスのコンストラクタ(void (__fastcall *)(void *this_ptr)と思われる)
+//004091F0	魔理沙ボム情報クラスのコンストラクタ(void (__fastcall *)(void *this_ptr)と思われる)
+//00409230	早苗ボム情報クラスのコンストラクタ(void (__fastcall *)(void *this_ptr)と思われる)
+//00409270	妖夢ボム情報クラスのコンストラクタ(void (__fastcall *)(void *this_ptr)と思われる)
+//004095C0	スペル使用可否判定(引数0、返り値1で使用可能、返り値0で使用不可、ボムストックの数は見ていない)
+//00414C80	ステージ情報セット
+//00426660	msgファイル解釈エンジン
+//00442A10	残機デクリメント
+//0045C5D0	SEを鳴らす(簡易版)
+//0045C740	SEを鳴らす
+//004755D1	デフォルトのnew演算子(void * (__stdcall *)(unsigned int class_size)と思われる)
+//0047E770	クラス初期化処理か？　全コンストラクタから呼び出されている(unsigned int /* 初期化したサイズ？ */ (__cdecl *)(void *this_ptr, unsigned int unknown/* 0固定 */, unsigned int class_size)と思われる)
+
+・リードオンリーデータ群(.rdata)
+//004A562C	ボム情報ベースクラスの仮想関数テーブル
+//004A55BC	霊夢ボム情報クラスの仮想関数テーブル
+//004A55D8	魔理沙ボム情報クラスの仮想関数テーブル
+//004A55F4	早苗ボム情報クラスの仮想関数テーブル
+//004A5610	妖夢ボム情報クラスの仮想関数テーブル
+
+・データ群(.data)
+004BB320	サウンドファイル名へのポインター59個
+
+004BE7B8	使用キャラ(0霊夢、1魔理沙、2早苗、3妖夢)
+
+004BE7C0	スコア/10
+004BE7C4	難易度(0easy,1normal,2hard,3lunatic,4extra?)
+
+004BE7D0	グレイズ
+
+004BE7DC	最大得点
+004BE7E0	最大得点初期値
+004BE7E4	最大得点上限
+004BE7E8	パワー/パワー単位
+004BE7EC	パワー最大値/パワー単位
+004BE7F0	パワー単位
+004BE7F4	残機
+004BE7F8	残機のかけら個数
+004BE7FC	(残機のかけら必要数-10)/5
+004BE800	ボム
+004BE804	ボムのかけら個数
+004BE808	霊界ゲージ
+
+004BE80C	ハイスコア/10
+
+004BE818	現在ステージ
+004BE81C	開始したステージ(リプレイなどで2面から再生すると2になる)
+004BE820	シーン(0道中、2中ボス、3ボス、4ボス戦終了～次ステージ開始まで)
+004BE824	ステージ開始からの経過フレーム
+004BE828	シーン(スペルなど)開始からの経過フレーム
+004BE830	各種フラグの合計(2ステージ移行中、16ハイスコア更新中、32タイトル画面へ、128トランス中)
+
+//004B92A8	東方動作記録
+
+004C2164	構造体のアドレス
+構造体+20	トランスのモード(0手動発動、2死亡発動)
+
+004C2170	ボム情報クラス(サイズ0x5A8以上)へのアドレス、使用キャラによってクラスが異なる(継承元クラスは同じ)
+
+004C2178	スペル情報構造体へのアドレス
+
+//004BC9E4	構造体(サイズ0xBC以上)へのアドレス
+
+004C2190	msg情報構造体(サイズ0x2B4)へのアドレス
+
+004C22C4	プレイヤー管理構造体へのアドレス
+//004BCB24	Unknown1構造体へのアドレス
+
+004C22DC	ステージ情報構造体へのアドレス
+
+004DC658	Unknown2構造体へのアドレス
+
+004DC670	ゲームエンジンの状態(1通常(タイトルメニューなども含む)、2リプレイ、3不明)
+
+//004D6F08	
+004DC6A4	IDirect3D9
+004DC6A8	IDirect3DDevice9
+
+004DC88F	起動モード(0:フルスクリーン640*480、1:ウィンドウ640*480、2:ウィンドウ960*720、3:ウィンドウ1280*960)
+
+004DD0A8	ウィンドウハンドル
+
+004DF1C0	鳴らす予定のSEのID一覧(4byte*12個)
+//004D9A30	鳴らす指示が同フレーム内で何度発行されたか(4byte*12個)
+
+004E0C28	SE情報構造体の配列(71個)
+004E12D0	SEのバイナリデータへのポインター*59個(SE情報構造体に変換後はNULL)
+
+・ボム情報ベースクラス(サイズ0x53C)
+struct BombInfoBase {
+	void **vtable;		// 仮想関数テーブル
+	unsigned int unknown1;
+	unsigned int unknown2;
+	void *unknown3;
+	void *unknown4;
+	unsigned char unknown5[44];
+	bool is_run;
+	unsigned char padding[3]; // unused
+	unsigned char unknown6[1272];
+};
+
+・スペル情報構造体
+struct SpellInfo {
+	unsigned int unknown1;
+	unsigned int unknown2;
+	void *unknown3;
+	void *unknown4;
+	unsigned char unknown5[20];
+	unsigned int frame_count;
+	unsigned int frame_count2;
+	float frame_count3;
+	void *unknown6;
+	unsigned int unknown7;
+	char name[64];
+	unsigned int unknown8;
+	unsigned int unknown9;
+	int bonus;
+	unsigned char unknown10[40];
+	float unknown11;
+	float unknown12;
+	float unknown13;
+};
+
+・msg情報構造体
+struct MsgInfo {
+	unsigned char unknown1[408];
+	void *msg_code;
+	unsigned char unknown2[280];
+};
+
+・プレイヤー管理構造体
+struct PlayerInfo {
+	unsigned char unknown[1524];
+	unsigned int status;			// (0不明、1不明、2不明、3不明、4被弾(喰らいボム受付時間中含む))
+	unsigned char unknown2[8];
+	unsigned int status_frame_count;	// 現在のstatusになってからの経過フレーム数
+};
+
+・Unknown1構造体
+struct Unknown1 {
+	unsigned char unknown1[8];
+	void *unknown2;
+	void *unknown3;
+	unsigned int unknown4;		// 1だと004B904C!=NULL？
+	unsigned char unknown5[4];
+	void *unknown6;
+	void *unknown7;
+	void *unknown8[STAGE_MAX + 1];
+	unsigned char unknown9[88];
+	struct UnknownStruct1 {
+		void *unknown1;
+		unsigned int unknown2;
+		unsigned char unknown3[16];
+		void *unknown4;
+		void *unknown5;
+		void *unknown6;
+		void *unknown7;
+	};
+	UnknownStruct1 unknown10[STAGE_MAX + 1];
+};
+
+・ステージ情報構造体
+struct StageInfo {
+	unsigned int number;
+	const char *std_filename;
+	const char *stgenm_filename;
+	const char *ecl_filename;
+	const char *unknown1;
+	const char *unknown2;
+	const char *msg_filename[4];
+	const char *logo_filename;
+	unsigned int unknown3;
+	unsigned int unknown4;
+	unsigned int unknown5;
+};
+
+・Unknown2構造体
+class ObjList : boost::noncopyable {
+public:
+	ObjList() : link(this) { }
+	unsigned int unknown1;	// [0x00] = 0
+	void *unknown2;		// [0x04] = -2
+	unsigned int unknown3;	// [0x08] = 0
+	unsigned int unknown4;	// [0x0C] = 0
+	unsigned int unknown5;	// [0x10] = 0
+	SingleLinkedList<Unknown2> link;
+	unsigned int unknown7;	// [0x1C] = 0
+	unsigned int unknown8;	// [0x20] = 0
+	void *unknown9;		// [0x24]
+};
+struct Unknown2 {
+	ObjList unknown1;
+	ObjList unknown2;
+	unsigned int unknown11;	// [0x50]
+	unsigned int unknown12;	// [0x54] = 0
+};
+
+・SE情報構造体
+struct SoundInfo {
+	IDirectSoundBuffer8 *buffer;
+	int unknown1;
+	struct UnknownStruct1 {
+		unsigned int id;
+		unsigned int unknown1;
+		unsigned int unknown2;
+		unsigned int unknown3;
+		unsigned int unknown4;
+	};
+	UnknownStruct1 *unknown2;
+	unsigned char unknown3[12];
+};

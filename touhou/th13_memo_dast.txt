@@ -1,0 +1,19 @@
+ebx = __00417780();
+eax = ebx + 0x11CC
+ebx = eax;
+ecx = ebx + 0x3FFC;
+ŽcHP = *(int*)ecx;
+
+
+
+ebx = *(int*)0x4d6eb4;
+eax = *(int*)(ebx+0x18)
+esi = *(int*)eax;
+ecx = *(int*)(esi+0x24);
+edi = ecx;
+esi = *(int*)(edi+0xB0);
+ebx = *(int*)esi;
+eax = ebx + 0x11CC
+ebx = eax;
+ecx = ebx + 0x3FFC;
+ŽcHP = *(int*)ecx;
